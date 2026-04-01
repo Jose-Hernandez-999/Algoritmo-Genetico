@@ -23,6 +23,8 @@ class Departamento:
 
 class GenomaAG:
 
+    GenomaAG.codigo 
+
     lista_maestra_departamentos = [
         Departamento('P1', 'Producción', 41.5552),
         Departamento('C1', 'Cocción', 6.6795),
@@ -74,3 +76,5 @@ class GenomaAG:
 individuo = GenomaAG.generar_genoma()
 print(repr(individuo))
 #print(individuo.departamentos)
+
+#Pruebaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
