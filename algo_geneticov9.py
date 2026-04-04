@@ -75,10 +75,11 @@ class GenomaAG:
             vector_bahias.append(codigos_bahia)
 
         return f"""
-        Permutacion de departamentos:{codigos} 
-        Quiebres:                    {(self.quiebres)}
-        Genoma:                      {vector_bahias}
-        Fitness:                     {self.fitness}"""
+        Permutacion: {codigos} 
+        Quiebres:    {(self.quiebres)}
+        Genoma:      {vector_bahias}
+        Fitness:     {self.fitness}
+        """
 
 individuo = GenomaAG.generar_genoma()
 print(repr(individuo))
