@@ -80,7 +80,8 @@ class GenomaAG:
         Genoma:      {vector_bahias}
         Fitness:     {self.fitness}
         """
-
+    
 individuo = GenomaAG.generar_genoma()
 print(repr(individuo))
+
 #print(individuo.departamentos)

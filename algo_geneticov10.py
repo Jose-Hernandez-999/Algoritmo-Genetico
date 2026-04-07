@@ -4,6 +4,7 @@
 
 #objetivos hoy: hacer method get_fitness() y hacee funcion para leer excel y importarla a este archivo
 
+
 import random 
 import copy
 
@@ -23,21 +24,33 @@ class Departamento:
 
 class GenomaAG:
 
-    lista_maestra_departamentos = [
+    lista_maestra_produccion = [
         Departamento('P1', 'Producción', 41.5552),
         Departamento('C1', 'Cocción', 6.6795),
         Departamento('A1', 'Almacenamiento', 25.2095),
         Departamento('O1', 'Oficina', 11.1112),
-        Departamento('A2', 'Almacén gaseosa', 4.42  ),
-        Departamento('C12', 'Cocina', 34.1648),
-        Departamento('M1', 'Comedor', 35.937 ),
-        Departamento('M2', 'Comedor 2', 47.0744),
-        Departamento('M3', 'Comedor 3', 13.94  ),
+        Departamento('A2', 'Almacén gaseosa', 4.42)
     ]
 
-    def __init__(self, departamentos, quiebres):
-        self.departamentos = departamentos
-        self.quiebres = quiebres
+    lista_maestra_cocina = [
+        Departamento('C12', 'Cocina', 34.1648),
+        Departamento('M1', 'Comedor', 35.937),
+        Departamento('M2', 'Comedor 2', 47.0744),
+        Departamento('M3', 'Comedor 3', 13.94)
+    ]
+
+    #variable global de clase para calcular distancias y obtener fitness
+    largo_planta_produccion = 304.80
+    largo_planta_cocina = 115.62
+
+    def __init__(self,  departamentos_produccion, quiebres_produccion, 
+                        departamentos_restaurante, quiebres_restaurante):        
+        
+        self.departamentos_produccion = departamentos_produccion
+        self.quiebres_produccion = quiebres_produccion
+        self.departamentos_restaurante = departamentos_restaurante
+        self.quiebres_restaurante = quiebres_restaurante
+        
         self.fitness = None
 
     @classmethod
@@ -88,3 +101,5 @@ individuo = GenomaAG.generar_genoma()
 print(repr(individuo))
 
 #print(individuo.departamentos)
+#docuemntar el codigo 
+#hacer que el algoritmo de un layout para cada instalacion (restaurante y planta)
