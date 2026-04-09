@@ -7,8 +7,19 @@
 import random 
 import copy
 
+class Departamento:
+
+    def __init__(self, codigo, nombre, area):
+        self.codigo = codigo
+        self.nombre = nombre
+        self.area = area
+        self.ancho = None
+        self.alto =  None
+        self.centroide_x = None
+        self.centroide_y = None
+
 class Genoma:
-    #variales de clase
+    #variables de clase a convertir en clase "Departamento"
     produccion = ['a', 'b', 'c', 'd', 'e']    
     cocina = ['f', 'g', 'h', 'j']    
 
@@ -22,7 +33,7 @@ class Genoma:
         self.fitness = fitness
 
     @classmethod
-    def generar_individuo(cls):
+    def generar_genoma(cls):
         permutacion_produccion = random.sample(cls.produccion, len(cls.produccion))
         permutacion_produccion = [copy.deepcopy(d) for d in permutacion_produccion]
         quiebres_produccion = [random.randint(0,1) for _ in range(len(cls.produccion)-1)]    
@@ -54,11 +65,12 @@ class Genoma:
         return f'''
         permutacion produccion: {self.deptos_produccion}
         quiebres produccion:    {self.quiebres_produccion}
+        bahias produccion:      {self.generar_bahias(self.deptos_produccion, self.quiebres_produccion)}
+
         permutacion cocina:     {self.deptos_cocina}
         quiebres cocina:        {self.quiebres_cocina}
-        bahias produccion:      {self.generar_bahias(self.deptos_produccion, self.quiebres_produccion)}
         bahias cocina:          {self.generar_bahias(self.deptos_cocina, self.quiebres_cocina)}
         '''
 
-individuo = Genoma.generar_individuo()
+individuo = Genoma.generar_genoma()
 print((individuo))
