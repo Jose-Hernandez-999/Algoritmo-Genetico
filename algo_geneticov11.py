@@ -36,12 +36,12 @@ class Genoma:
     ]
     
     def __init__(self, deptos_produccion, quiebres_produccion, 
-                       deptos_restaurante, quiebres_cocina, fitness = None):
+                       deptos_restaurante, quiebres_restaurante, fitness = None):
 
         self.deptos_produccion = deptos_produccion
         self.deptos_restaurante = deptos_restaurante
         self.quiebres_produccion = quiebres_produccion
-        self.quiebres_cocina = quiebres_cocina
+        self.quiebres_restaurante = quiebres_restaurante
         self.fitness = fitness
 
     @classmethod
@@ -52,10 +52,10 @@ class Genoma:
 
         permutacion_restaurante =  random.sample(cls.restaurante, len(cls.restaurante))
         permutacion_restaurante = [copy.deepcopy(d) for d in permutacion_restaurante]
-        quiebres_cocina = [random.randint(0,1) for _ in range(len(cls.restaurante)-1)]
+        quiebres_restaurante = [random.randint(0,1) for _ in range(len(cls.restaurante)-1)]
 
-        return  cls(permutacion_produccion, quiebres_produccion, permutacion_restaurante, quiebres_cocina)
-    
+        return  cls(permutacion_produccion, quiebres_produccion, permutacion_restaurante, quiebres_restaurante)
+
     def generar_bahias(self, departamentos, quiebres):
         bahia = []
         bahia_actual = []   
@@ -72,25 +72,44 @@ class Genoma:
         
         permutacion_produccion = []
         for depto in self.deptos_produccion:
-            depto.codigo
             permutacion_produccion.append(depto.codigo)
             
         permutacion_restaurante = []
         for depto in self.deptos_restaurante:
-            depto.codigo
             permutacion_restaurante.append(depto.codigo)
 
-        #terminar de corregir el repr method y hacer method calculo fitness y seguir el resto de pasos del algo 
+        #devuelve los objetos 
+        bahias_produccion_objetos = self.generar_bahias(self.deptos_produccion, self.quiebres_produccion)
+        bahias_restaurante_objetos = self.generar_bahias(self.deptos_restaurante, self.quiebres_restaurante)
+
+        #devuelve el atributo codigo de los objetos del return de generar_bahias()
+        bahias_produccion = []
+        for bahia in bahias_produccion_objetos:
+            sublista_produccion = []
+            for depto in bahia:
+                sublista_produccion.append(depto.codigo)
+            bahias_produccion.append(sublista_produccion) 
+
+        bahias_restaurante = []
+        for bahia in bahias_restaurante_objetos:
+            sublista_restaurante = []
+            for depto in bahia:
+                sublista_restaurante.append(depto.codigo)
+            bahias_restaurante.append(sublista_restaurante)
+    
         return f'''
         permutacion produccion:  {permutacion_produccion}
         quiebres produccion:     {self.quiebres_produccion} 
-        bahias produccion:       {self.generar_bahias(permutacion_produccion, self.quiebres_produccion)}
+        bahias produccion:       {bahias_produccion}
         -----------------
         permutacion restaurante: {permutacion_restaurante}
-        quiebres restaurante:    {self.quiebres_cocina}
-        bahias restaurante:      {self.generar_bahias(permutacion_restaurante, self.quiebres_cocina)}
+        quiebres restaurante:    {self.quiebres_restaurante}
+        bahias restaurante:      {bahias_restaurante}
         '''
           
+    def layput(self, x , y):
+        pass
+
     def calcular_fitness(self):
         pass
 

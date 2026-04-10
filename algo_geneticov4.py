@@ -40,7 +40,6 @@ print()
 print(f'genoma: {individuo}')
 print()
 
-
 #falta hacer que me devuelva un diccionario, terminar de definir clase individuo y agregar metodo para
 # calcular fitness en clase Individuo
 #agregar funcion que penalice layouts

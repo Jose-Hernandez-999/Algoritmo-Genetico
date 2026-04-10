@@ -78,7 +78,7 @@ class GenomaAG:
         codigos = []
         for depto in self.departamentos:
             codigo_departamento = depto.codigo
-            codigos.append(codigo_departamento)
+            codigos.append(len(codigo_departamento))
 
         vector_bahias = []
         for bahia in self.crear_bahias():

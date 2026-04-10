@@ -1,9 +1,14 @@
+#para hoy 8/4/2026:
+#1. crear clase Departamentos y agregar datos del excel como variable de clase en Genoma
+#2. convertir los datos en clase Departamentos (atributos: codigo, nombre, area, ancho, alto, centroide X y centroide Y)
+#3. refactorizar el classmethod  y __repr__ para que use los datos de las nuevas variables de clase
+#4. perdirle review a chatgpt y empezar a programar el method calcular_fitness()
 
 import random 
 import copy
 
 class Genoma:
-
+    #variales de clase
     produccion = ['a', 'b', 'c', 'd', 'e']    
     cocina = ['f', 'g', 'h', 'j']    
 
@@ -12,8 +17,8 @@ class Genoma:
 
         self.deptos_produccion = deptos_produccion
         self.deptos_cocina = deptos_cocina
-        self.quiebres_produccion = deptos_produccion
-        self.quiebres_cocina = deptos_cocina
+        self.quiebres_produccion = quiebres_produccion
+        self.quiebres_cocina = quiebres_cocina
         self.fitness = fitness
 
     @classmethod
@@ -27,14 +32,33 @@ class Genoma:
         quiebres_cocina = [random.randint(0,1) for _ in range(len(cls.cocina)-1)]
 
         return  cls(permutacion_produccion, quiebres_produccion, permutacion_cocina, quiebres_cocina)
+    
+    def generar_bahias(self, departamentos, quiebres):
+        bahia = []
+        bahia_actual = []   
+        for i in range(len(departamentos)):
+            bahia_actual.append(departamentos[i])
+            if i < len(quiebres) and quiebres[i] == 1:
+                bahia.append(bahia_actual)
+                bahia_actual = []
+        if bahia_actual:
+            bahia.append(bahia_actual)
+        return bahia
 
     def __repr__(self):
-        valores_produccion = []    
-        for d in range(self.deptos_produccion):
-            pass
-
-
-        return None
+        
+        permutacion_produccion = []
+        for depto in self.deptos_produccion:
+            permutacion_produccion.append(depto)        
+        
+        return f'''
+        permutacion produccion: {self.deptos_produccion}
+        quiebres produccion:    {self.quiebres_produccion}
+        permutacion cocina:     {self.deptos_cocina}
+        quiebres cocina:        {self.quiebres_cocina}
+        bahias produccion:      {self.generar_bahias(self.deptos_produccion, self.quiebres_produccion)}
+        bahias cocina:          {self.generar_bahias(self.deptos_cocina, self.quiebres_cocina)}
+        '''
 
 individuo = Genoma.generar_individuo()
-print(repr(individuo))
+print((individuo))
