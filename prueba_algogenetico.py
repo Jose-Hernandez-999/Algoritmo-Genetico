@@ -60,5 +60,10 @@ class Genoma:
         bahias cocina:          {self.generar_bahias(self.deptos_cocina, self.quiebres_cocina)}
         '''
 
+    
+
+
+
+
 individuo = Genoma.generar_individuo()
 print((individuo))

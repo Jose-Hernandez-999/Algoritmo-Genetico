@@ -107,7 +107,7 @@ class Genoma:
         bahias restaurante:      {bahias_restaurante}
         '''
           
-    def layput(self, x , y):
+    def layout(self, x , y):
         pass
 
     def calcular_fitness(self):
