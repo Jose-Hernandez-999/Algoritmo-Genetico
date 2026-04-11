@@ -34,10 +34,13 @@ class Genoma:
         Departamento('M2', 'Comedor 2', 47.0744),
         Departamento('M3', 'Comedor 3', 13.94)
     ]
+
+    #variable global de clase para calcular distancias y obtener fitness
+    largo_produccion = 30
+    largo_restaurante = 14
     
     def __init__(self, deptos_produccion, quiebres_produccion, 
                        deptos_restaurante, quiebres_restaurante, fitness = None):
-
         self.deptos_produccion = deptos_produccion
         self.deptos_restaurante = deptos_restaurante
         self.quiebres_produccion = quiebres_produccion
@@ -67,6 +70,13 @@ class Genoma:
         if bahia_actual:
             bahia.append(bahia_actual)
         return bahia
+
+    def calcular_altos_ancho_bahia(self, areas, largo_instalacion):
+        suma_areas = 0 
+        for depto in bahia:
+            pass
+        
+
 
     def __repr__(self):
         
@@ -107,7 +117,7 @@ class Genoma:
         bahias restaurante:      {bahias_restaurante}
         '''
           
-    def layput(self, x , y):
+    def layout(self, x , y):
         pass
 
     def calcular_fitness(self):
