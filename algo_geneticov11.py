@@ -74,33 +74,34 @@ class Genoma:
             bahias.append(bahia_actual)
         return bahias
 
-    def calculo_anchos_altos(self, bahias, largo):
+    def calculo_anchos_altos(self):
         
-        #devuelve la suma de las areas de los deptos por bahia, la cantidad de sumas es igual a la cantidad de bahias
-        # len(suma_areas) == len(quiebres)
-        suma_deptos_bahia = []
-        for i in range(len(bahias)):
-            suma_areas = sum(bahias[i])
-            suma_deptos_bahia.append(suma_areas)
-        
-        #devuelve el ancho de cada bahia de acuerdo a la formula ancho_bahia = sumatoria(areas en bahia)/largo_instalacion
-        anchos_bahias = []
-        for alto_depto in suma_deptos_bahia:
-            ancho = alto_depto/largo
-            anchos_bahias.append(ancho)
-        
-        #devuelve el alto de cada departamento en la bahia
-        altos_por_bahia = []
-        for j in range(len(bahias)):
-            ancho = anchos_bahias[j]
-            altos_deptos = []
-            for area in bahias[j]:
-                altos = area/ancho
-                altos_deptos.append(altos)
-            altos_por_bahia.append(altos_deptos)
+        bahias_produccion = self.generar_bahias(self.deptos_produccion, self.quiebres_produccion)
+        bahias_restaurante = self.generar_bahias(self.deptos_restaurante, self.quiebres_restaurante)
 
-        return suma_deptos_bahia, anchos_bahias, altos_por_bahia
+        #produccion
+        for bahia in bahias_produccion:
+            suma_areas = 0
+            for depto in bahia:
+                suma_areas += depto.area
+            ancho_bahia = suma_areas/self.largo_produccion
 
+            for depto in bahia:
+                depto.ancho = ancho_bahia
+                depto.alto = depto.area/ancho_bahia
+        
+        #restaurante
+        for bahia in bahias_restaurante:
+            suma_areas = 0
+            for depto in bahia:
+                suma_areas += depto.area
+            ancho_bahia = suma_areas/self.largo_restaurante
+
+            for depto in bahia:
+                depto.ancho = ancho_bahia
+                depto.alto = depto.area/ancho_bahia
+        
+            
     def __repr__(self):
 
         permutacion_produccion = []
@@ -148,4 +149,3 @@ class Genoma:
 
 individuo = Genoma.generar_genoma()
 print(individuo)
-print(individuo.calculo_anchos_altos())
