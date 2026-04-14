@@ -42,7 +42,7 @@ def calular_anchosbahias_y_altosdeptos(elementos, largo):
         for area in bahias[l]:
             altos = area/ancho
             altos_deptos.append(altos)
-    altos_por_bahia.append(altos_deptos)
+        altos_por_bahia.append(altos_deptos)
 
     return v_quiebres, bahias, suma_deptos_bahia, anchos_bahias, altos_por_bahia
 

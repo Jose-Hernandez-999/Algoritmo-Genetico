@@ -1,4 +1,4 @@
-k#para hoy 8/4/2026:
+#para hoy 8/4/2026:
 #1. crear clase Departamentos y agregar datos del excel como variable de clase en Genoma
 #2. convertir los datos en clase Departamentos (atributos: codigo, nombre, area, ancho, alto, centroide X y centroide Y)
 #3. refactorizar el classmethod  y __repr__ para que use los datos de las nuevas variables de clase
@@ -71,49 +71,35 @@ class Genoma:
                 bahias.append(bahia_actual)
                 bahia_actual = []
         if bahia_actual:
-            bahia.append(bahia_actual)
-        return bahia
+            bahias.append(bahia_actual)
+        return bahias
 
-    def calculo_anchos_altos(self):
-        #devuelve la suma de las areas de los deptos por bahia (la cantidad de bahias depende de quiebres por tanto 
-        # len(suma_areas) == len(quiebres))
+    def calculo_anchos_altos(self, bahias, largo):
+        
+        #devuelve la suma de las areas de los deptos por bahia, la cantidad de sumas es igual a la cantidad de bahias
+        # len(suma_areas) == len(quiebres)
         suma_deptos_bahia = []
         for i in range(len(bahias)):
             suma_areas = sum(bahias[i])
             suma_deptos_bahia.append(suma_areas)
-
+        
         #devuelve el ancho de cada bahia de acuerdo a la formula ancho_bahia = sumatoria(areas en bahia)/largo_instalacion
-        anchos_bahia = []
-        for suma in suma_deptos_bahia:
-            ancho = suma/largo_instalacion
-            anchos_bahia.append(ancho)
-
+        anchos_bahias = []
+        for alto_depto in suma_deptos_bahia:
+            ancho = alto_depto/largo
+            anchos_bahias.append(ancho)
+        
         #devuelve el alto de cada departamento en la bahia
         altos_por_bahia = []
-        altos_deptos = []
         for j in range(len(bahias)):
-            ancho = anchos_bahia[j]
+            ancho = anchos_bahias[j]
+            altos_deptos = []
             for area in bahias[j]:
                 altos = area/ancho
                 altos_deptos.append(altos)
-        altos_por_bahia.append(altos_deptos)
-        
+            altos_por_bahia.append(altos_deptos)
 
-
-    #CONTINUAR
-       
-
-
-
-
-
-
-
-
-
-
-
-
+        return suma_deptos_bahia, anchos_bahias, altos_por_bahia
 
     def __repr__(self):
 
@@ -161,4 +147,5 @@ class Genoma:
         pass
 
 individuo = Genoma.generar_genoma()
-print((individuo))
+print(individuo)
+print(individuo.calculo_anchos_altos())

@@ -10,12 +10,8 @@ import copy
 class Genoma:
     #variales de clase
     produccion = ['a', 'b', 'c', 'd', 'e']    
-    cocina = ['f', 'g', 'h', 'j'] 
+    cocina = ['f', 'g', 'h', 'j']    
 
-
-    areas_produccion = [2,4,5,6,7]
-    largo_produccion = 50   
-    
     def __init__(self, deptos_produccion, quiebres_produccion, 
                        deptos_cocina, quiebres_cocina, fitness = None):
 
@@ -48,19 +44,6 @@ class Genoma:
         if bahia_actual:
             bahia.append(bahia_actual)
         return bahia
-    
-    def calcular_distancias(self, largo_instalacion, areas):
-        
-        suma_areas = 0
-        for area in areas:
-            suma_areas += area/largo_instalacion
-            return suma_areas
-        
-
-
-
-
-
 
     def __repr__(self):
         
@@ -76,6 +59,6 @@ class Genoma:
         bahias produccion:      {self.generar_bahias(self.deptos_produccion, self.quiebres_produccion)}
         bahias cocina:          {self.generar_bahias(self.deptos_cocina, self.quiebres_cocina)}
         '''
-
+    
 individuo = Genoma.generar_individuo()
 print((individuo))
