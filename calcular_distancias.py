@@ -46,4 +46,8 @@ def calular_anchosbahias_y_altosdeptos(elementos, largo):
 
     return v_quiebres, bahias, suma_deptos_bahia, anchos_bahias, altos_por_bahia
 
+print()
+print()
 print(calular_anchosbahias_y_altosdeptos(areas, largo_instalacion))
+print()
+print()
