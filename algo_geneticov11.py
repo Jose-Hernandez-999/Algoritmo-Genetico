@@ -1,4 +1,4 @@
-#para hoy 8/4/2026:
+k#para hoy 8/4/2026:
 #1. crear clase Departamentos y agregar datos del excel como variable de clase en Genoma
 #2. convertir los datos en clase Departamentos (atributos: codigo, nombre, area, ancho, alto, centroide X y centroide Y)
 #3. refactorizar el classmethod  y __repr__ para que use los datos de las nuevas variables de clase
@@ -67,6 +67,7 @@ class Genoma:
         if bahia_actual:
             bahia.append(bahia_actual)
         return bahia
+    
 
     def __repr__(self):
         
