@@ -74,11 +74,8 @@ class Genoma:
             bahias.append(bahia_actual)
         return bahias
 
-    def calculo_anchos_altos(self):
+    def calculo_anchos_altos(self, bahias_produccion, bahias_restaurante):
         
-        bahias_produccion = self.generar_bahias(self.deptos_produccion, self.quiebres_produccion)
-        bahias_restaurante = self.generar_bahias(self.deptos_restaurante, self.quiebres_restaurante)
-
         #produccion
         for bahia in bahias_produccion:
             suma_areas = 0
@@ -100,6 +97,34 @@ class Genoma:
             for depto in bahia:
                 depto.ancho = ancho_bahia
                 depto.alto = depto.area/ancho_bahia
+    
+    def calcular_centroides(self, bahias_produccion, bahias_restaurante):
+
+        #calculo de centroides de produccion (el unico cambio es en la variable "largo" usada)
+        borde_izq = 0
+        for bahia in bahias_produccion:
+            ancho_actual = bahia[0].ancho
+            borde_sup = self.largo_produccion
+
+            for depto in bahia:
+                depto.centroide_x = borde_izq + ancho_actual/2
+                depto.centroide_y = borde_sup - depto.alto/2
+                borde_sup -= depto.alto
+            
+            borde_izq += ancho_actual
+
+        #calculo de centroides en el restaurante
+        borde_izq = 0
+        for bahia in bahias_restaurante:
+            ancho_actual = bahia[0].ancho
+            borde_sup = self.largo_restaurante
+
+            for depto in bahia:
+                depto.centroide_x = borde_izq + ancho_actual/2
+                depto.centroide_y = borde_sup - depto.alto/2
+                borde_sup -= depto.alto          
+                
+            borde_izq += ancho_actual
 
     def __repr__(self):
 
@@ -140,12 +165,9 @@ class Genoma:
         bahias restaurante:      {bahias_restaurante}
         '''
           
-    def layout(self, x , y):
-        pass
 
     def calcular_fitness(self):
         pass
 
 individuo = Genoma.generar_genoma()
 print(individuo)
-print(individuo.calculo_anchos_altos())
