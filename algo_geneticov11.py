@@ -100,8 +100,7 @@ class Genoma:
             for depto in bahia:
                 depto.ancho = ancho_bahia
                 depto.alto = depto.area/ancho_bahia
-        
-            
+
     def __repr__(self):
 
         permutacion_produccion = []
@@ -149,3 +148,4 @@ class Genoma:
 
 individuo = Genoma.generar_genoma()
 print(individuo)
+print(individuo.calculo_anchos_altos())
