@@ -7,6 +7,10 @@
 import random 
 import copy
 
+def leer_excel():
+    pass
+
+
 class Departamento:
 
     def __init__(self, codigo, nombre, area, indice):
@@ -30,10 +34,10 @@ class Genoma:
     ]   
 
     restaurante = [
-        Departamento('C12','Cocina',    34.1648, 5),
-        Departamento('M1', 'Comedor 1',   35.937,  6),
-        Departamento('M2', 'Comedor 2', 47.0744, 7),
-        Departamento('M3', 'Comedor 3', 13.94,   8)
+        Departamento('C12','Cocina',    34.1648,  5),
+        Departamento('M1', 'Comedor 1',   35.937, 6),
+        Departamento('M2', 'Comedor 2', 47.0744,  7),
+        Departamento('M3', 'Comedor 3', 13.94,    8)
     ]
 
     #variable global de clase para calcular distancias y obtener fitness
@@ -130,9 +134,20 @@ class Genoma:
                 
             borde_izq += ancho_actual
 
-    def calcular_costo():
-        pass
+    def calcular_costo(self):
+        total_departamentos = self.deptos_produccion + self.deptos_restaurantes
+        
+        
 
+
+
+        
+        pass
+        
+        
+        
+        
+        
 
 
     def __repr__(self):
@@ -179,7 +194,6 @@ class Genoma:
         pass
 
 poblacion = 200
-
 individuo = Genoma.generar_genoma()
 print(individuo)
 
