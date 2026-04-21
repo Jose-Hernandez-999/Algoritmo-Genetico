@@ -169,5 +169,10 @@ class Genoma:
     def calcular_fitness(self):
         pass
 
+poblacion = 200
+
 individuo = Genoma.generar_genoma()
 print(individuo)
+
+for s in range(poblacion):
+    print(individuo)
