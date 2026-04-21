@@ -9,10 +9,11 @@ import copy
 
 class Departamento:
 
-    def __init__(self, codigo, nombre, area):
+    def __init__(self, codigo, nombre, area, indice):
         self.codigo = codigo
         self.nombre = nombre
         self.area = area
+        self.indice = indice
         self.ancho = None
         self.alto =  None
         self.centroide_x = None
@@ -21,24 +22,27 @@ class Departamento:
 class Genoma:
     #variables de clase a convertir en clase "Departamento"
     produccion = [
-        Departamento('P1', 'Producción',     41.5552),
-        Departamento('C1', 'Cocción',        6.6795),
-        Departamento('A1', 'Almacenamiento', 25.2095),
-        Departamento('O1', 'Oficina',        11.1112),
-        Departamento('A2', 'Almacén gaseosa',4.42)
+        Departamento('P1', 'Producción',     41.5552, 0),
+        Departamento('C1', 'Cocción',        6.6795,  1),
+        Departamento('A1', 'Almacenamiento', 25.2095, 2),
+        Departamento('O1', 'Oficina',        11.1112, 3),
+        Departamento('A2', 'Almacén gaseosa',4.42,    4)
     ]   
 
     restaurante = [
-        Departamento('C12','Cocina',    34.1648),
-        Departamento('M1', 'Comedor',   35.937),
-        Departamento('M2', 'Comedor 2', 47.0744),
-        Departamento('M3', 'Comedor 3', 13.94)
+        Departamento('C12','Cocina',    34.1648, 5),
+        Departamento('M1', 'Comedor 1',   35.937,  6),
+        Departamento('M2', 'Comedor 2', 47.0744, 7),
+        Departamento('M3', 'Comedor 3', 13.94,   8)
     ]
 
     #variable global de clase para calcular distancias y obtener fitness
     largo_produccion = 30
     largo_restaurante = 14
-    
+    distancia_instalaciones = 43
+    relacion_de_aspecto = 4
+
+
     def __init__(self, deptos_produccion, quiebres_produccion, 
                        deptos_restaurante, quiebres_restaurante, fitness = None):
 
@@ -125,6 +129,11 @@ class Genoma:
                 borde_sup -= depto.alto          
                 
             borde_izq += ancho_actual
+
+    def calcular_costo():
+        pass
+
+
 
     def __repr__(self):
 
