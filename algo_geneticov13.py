@@ -92,7 +92,7 @@ class Genoma:
             bahias.append(bahia_actual)
         return bahias
 
-    def calculo_anchos_altos(self, bahias_produccion, bahias_restaurante):
+    def calcular_anchos_altos(self, bahias_produccion, bahias_restaurante):
         
         #produccion
         for bahia in bahias_produccion:
@@ -175,7 +175,7 @@ class Genoma:
         
         return costo
 
-    def penalizacion(self, costo):
+    def calcular_penalizacion(self, costo):
         
         total_departamentos = self.deptos_produccion + self.deptos_restaurante
         #acumulador de los deptos que no cumplan la restriccion de relacion de aspecto
@@ -194,15 +194,22 @@ class Genoma:
         return fitness
 
     def calcular_fitness(self):
-        pass
+        
+        bahias_prod = self.generar_bahias(
+            self.deptos_produccion, 
+            self.quiebres_produccion
+        )
+
+        bahias_rest = self.generar_bahias(
+            self.deptos_restaurante, 
+            self.quiebres_restaurante
+        )
     
-    
+        self.calcular_anchos_altos(bahias_prod, bahias_rest)
+        self.calcular_centroides(bahias_prod, bahias_rest)
 
-
-
-
-
-
+        mhc = self.calcular_costo()
+        self.fitness = self.calcular_penalizacion(mhc)
     
     def __repr__(self):
 
