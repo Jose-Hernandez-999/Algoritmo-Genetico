@@ -134,9 +134,11 @@ class Genoma:
                 
             borde_izq += ancho_actual
 
-    def calcular_costo(self):
-        total_departamentos = self.deptos_produccion + self.deptos_restaurantes
+    def calcular_mhc(self):
         
+        total_departamentos = self.deptos_produccion + self.deptos_restaurantes
+        costo_total = 0
+
         
 
 
