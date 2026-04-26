@@ -35,7 +35,7 @@ class Genoma:
 
     restaurante = [
         Departamento('C12','Cocina',    34.1648,  5),
-        Departamento('M1', 'Comedor 1',   35.937, 6),
+        Departamento('M1', 'Comedor 1', 35.937,   6),
         Departamento('M2', 'Comedor 2', 47.0744,  7),
         Departamento('M3', 'Comedor 3', 13.94,    8)
     ]
@@ -92,7 +92,7 @@ class Genoma:
             bahias.append(bahia_actual)
         return bahias
 
-    def calculo_anchos_altos(self, bahias_produccion, bahias_restaurante):
+    def calcular_anchos_altos(self, bahias_produccion, bahias_restaurante):
         
         #produccion
         for bahia in bahias_produccion:
@@ -145,20 +145,71 @@ class Genoma:
             borde_izq += ancho_actual
 
     def calcular_costo(self):
-        total_departamentos = self.deptos_produccion + self.deptos_restaurantes
-        
-        
+        #se agrupan todos los departamentos en una sola variable para que permita hacer el calculo de costo 
+        # por parejas
+        total_departamentos = self.deptos_produccion + self.deptos_restaurante
+        costo = 0
 
+        #se itera sobre cada departamento de cada instalacion
+        for depto_i in total_departamentos:
+            for depto_j in total_departamentos:
+                if depto_i is depto_j: #se agrega este condicional en caso de que la pareja de deptos sean los mismo
+                    continue 
+                
+                #calculo de distancia usando el atributo .centroide
+                distancia = abs(depto_i.centroide_x - depto_j.centroide_x) 
+                + abs(depto_i.centroide_y - depto_j.centroide_y)
 
+                #verificacion de si los deptos estan en la misma instalacion usando el atributo indice
+                # los deptos de produccion tiene indices de 0 a 4 por tanto si no tienen el mismo .indice
+                # son de instalaciones distintas, por tanto se suma la distancia entre cada instalacion
+                mismo_espacio = (depto_i.indice <= 4) == (depto_j.indice <= 4)
+                if not mismo_espacio:
+                    distancia += self.distancia_instalaciones      
 
-        
-        pass
-        
-        
-        
-        
-        
+                #se encuentra el flujo entre el par de deptos usando el .indice ya que cada pareja representa una fila
+                # y una columna
+                flujo = self.matriz_flujos[depto_i.indice][depto_j.indice]
 
+                costo += flujo * distancia
+        
+        return costo
+
+    def calcular_penalizacion(self, costo):
+        
+        total_departamentos = self.deptos_produccion + self.deptos_restaurante
+        #acumulador de los deptos que no cumplan la restriccion de relacion de aspecto
+        deptos_subtimos = 0
+
+        #iteramos sobre cada depto de ambas instalaciones sin condicionao
+        for depto in total_departamentos:
+            #definimso la variable de relacion de aspecto para cada depto haciendo el calculo del ancho y alto mas largo entre el mas costo
+            #si la relacion de aspecto del depto es mayor al de la restriccion sumamos 1 al acumulador
+            relacion_aspecto = max(depto.ancho, depto.alto) / min(depto.ancho, depto.alto)
+            if relacion_aspecto > self.relacion_aspecto_maxima:
+                deptos_subtimos += 1
+        #aumentamos el valor del fitness haciendo al individuo suboptimo por romper mucho la restriccion
+        fitness = costo + (deptos_subtimos**3) * costo
+
+        return fitness
+
+    def calcular_fitness(self):
+        
+        bahias_prod = self.generar_bahias(
+            self.deptos_produccion, 
+            self.quiebres_produccion
+        )
+
+        bahias_rest = self.generar_bahias(
+            self.deptos_restaurante, 
+            self.quiebres_restaurante
+        )
+    
+        self.calcular_anchos_altos(bahias_prod, bahias_rest)
+        self.calcular_centroides(bahias_prod, bahias_rest)
+
+        mhc = self.calcular_costo()
+        self.fitness = self.calcular_penalizacion(mhc)
     
     def __repr__(self):
 
