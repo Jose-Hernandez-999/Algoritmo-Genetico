@@ -23,6 +23,32 @@ class Departamento:
         self.centroide_x = None
         self.centroide_y = None
 
+    def __repr__(self):
+
+        if self.ancho == None:
+            ancho_dp = '---'
+        else:
+            round(self.ancho, 3)
+
+        if self.alto == None:
+            alto_dp = '---'
+        else:
+            round(self.alto, 3)
+            
+        if self.centroide_x == None:
+            centroide_x_dp = '---'
+        else:
+            round(self.centroide_x, 3)
+        
+        if self.centroide_y == None:
+            centroide_y_dp = '---'
+        else:
+            round(self.centroide_y, 3)
+            
+        return f"""
+        Depto({self.codigo} | area: {self.area} | ancho: {ancho_dp} | alto: {alto_dp}
+        centroide_x: {centroide_x_dp} | centroide_y: {centroide_y_dp})"""
+
 class Genoma:
     #variables de clase a convertir en clase "Departamento"
     produccion = [
@@ -35,7 +61,7 @@ class Genoma:
 
     restaurante = [
         Departamento('C12','Cocina',    34.1648,  5),
-        Departamento('M1', 'Comedor 1',   35.937, 6),
+        Departamento('M1', 'Comedor 1', 35.937, 6),
         Departamento('M2', 'Comedor 2', 47.0744,  7),
         Departamento('M3', 'Comedor 3', 13.94,    8)
     ]
@@ -248,7 +274,9 @@ class Genoma:
         permutacion restaurante: {permutacion_restaurante}
         quiebres restaurante:    {self.quiebres_restaurante}
         bahias restaurante:      {bahias_restaurante}
+
+
         '''
 
 individuo = Genoma.generar_genoma()
-print(individuo)
+print(repr(individuo))
