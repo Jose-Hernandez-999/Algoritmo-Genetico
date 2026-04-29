@@ -4,7 +4,6 @@
 #3. refactorizar el classmethod  y __repr__ para que use los datos de las nuevas variables de clase
 #4. perdirle review a chatgpt y empezar a programar el method calcular_fitness()
 
-import time
 import random 
 import copy
 
@@ -261,7 +260,7 @@ class Genoma:
         for i, bahia in enumerate(bahias_rest):
             texto_bahias_rest += f"bahia {i+1}:\n"
             for depto in bahia:
-                texto_bahias_rest += f"    {depto}\n"
+                texto_bahias_rest += f"{depto}\n"
 
         if self.fitness is None:
             fitnes_txt = "sin evaluar"
@@ -269,8 +268,6 @@ class Genoma:
             fitnes_txt = round(self.fitness, 3)
 
         return f"""
-        ---------------------
-
         PRODUCCION-----------
         permutacion: {codigos_prod}
         quiebres:    {self.quiebres_produccion}
