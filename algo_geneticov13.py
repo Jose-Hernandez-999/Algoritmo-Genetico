@@ -7,10 +7,6 @@
 import random 
 import copy
 
-def leer_excel():
-    pass
-
-
 class Departamento:
 
     def __init__(self, codigo, nombre, area, indice):
@@ -22,6 +18,32 @@ class Departamento:
         self.alto =  None
         self.centroide_x = None
         self.centroide_y = None
+
+    def __repr__(self):
+
+        if self.ancho is None:
+            ancho_dp = '---'
+        else:
+            ancho_dp = round(self.ancho, 3)
+
+        if self.alto is None:
+            alto_dp = '---'
+        else:
+            alto_dp = round(self.alto, 3)
+            
+        if self.centroide_x is None:
+            centroide_x_dp = '---'
+        else:
+            centroide_x_dp = round(self.centroide_x, 3)
+        
+        if self.centroide_y is None:
+            centroide_y_dp = '---'
+        else:
+            centroide_y_dp = round(self.centroide_y, 3)
+            
+        return f"""
+        Depto({self.codigo} | area: {self.area} | ancho: {ancho_dp} | alto: {alto_dp}
+        centroide_x: {centroide_x_dp} | centroide_y: {centroide_y_dp})"""
 
 class Genoma:
     #variables de clase a convertir en clase "Departamento"
@@ -213,42 +235,58 @@ class Genoma:
     
     def __repr__(self):
 
-        permutacion_produccion = []
+        codigos_prod = []
         for depto in self.deptos_produccion:
-            permutacion_produccion.append(depto.codigo)
-            
-        permutacion_restaurante = []
-        for depto in self.deptos_restaurante:
-            permutacion_restaurante.append(depto.codigo)
-
-        #devuelve los objetos 
-        bahias_produccion_objetos = self.generar_bahias(self.deptos_produccion, self.quiebres_produccion)
-        bahias_restaurante_objetos = self.generar_bahias(self.deptos_restaurante, self.quiebres_restaurante)
-
-        #devuelve el atributo codigo de los objetos del return de generar_bahias()
-        bahias_produccion = []
-        for bahia in bahias_produccion_objetos:
-            sublista_produccion = []
-            for depto in bahia:
-                sublista_produccion.append(depto.codigo)
-            bahias_produccion.append(sublista_produccion) 
-
-        bahias_restaurante = []
-        for bahia in bahias_restaurante_objetos:
-            sublista_restaurante = []
-            for depto in bahia:
-                sublista_restaurante.append(depto.codigo)
-            bahias_restaurante.append(sublista_restaurante)
+            codigos_prod.append(depto.codigo)
     
-        return f'''
-        permutacion produccion:  {permutacion_produccion}
-        quiebres produccion:     {self.quiebres_produccion} 
-        bahias produccion:       {bahias_produccion}
-        -----------------
-        permutacion restaurante: {permutacion_restaurante}
-        quiebres restaurante:    {self.quiebres_restaurante}
-        bahias restaurante:      {bahias_restaurante}
-        '''
+        bahias_prod = self.generar_bahias(self.deptos_produccion, 
+        self.quiebres_produccion)
 
+        texto_bahias_prod = ''
+        for i, bahia in enumerate(bahias_prod):
+            texto_bahias_prod += f" bahia {i+1}:\n"
+            for depto in bahia:
+                texto_bahias_prod += f"     {depto}\n"
+
+        
+        codigos_rest = []
+        for depto in self.deptos_restaurante:
+            codigos_rest.append(depto.codigo)
+
+        bahias_rest = self.generar_bahias(self.deptos_restaurante, 
+        self.quiebres_restaurante)
+
+        texto_bahias_rest = ''
+        for i, bahia in enumerate(bahias_rest):
+            texto_bahias_rest += f"bahia {i+1}:\n"
+            for depto in bahia:
+                texto_bahias_rest += f"{depto}\n"
+
+        if self.fitness is None:
+            fitnes_txt = "sin evaluar"
+        else:
+            fitnes_txt = round(self.fitness, 3)
+
+        return f"""
+        PRODUCCION-----------
+        permutacion: {codigos_prod}
+        quiebres:    {self.quiebres_produccion}
+        bahias:      {texto_bahias_prod}
+        RESTAURANTE----------
+        permutacion: {codigos_rest}
+        quiebres:    {self.quiebres_restaurante}
+        bahias:      {texto_bahias_rest}
+        FITNESS--------------
+
+        {fitnes_txt}
+        ---------------------
+        """
+
+class Poblacion:
+    pass
+
+
+#verificacion
 individuo = Genoma.generar_genoma()
+individuo.calcular_fitness()
 print(individuo)
