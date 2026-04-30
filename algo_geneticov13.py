@@ -263,9 +263,9 @@ class Genoma:
                 texto_bahias_rest += f"{depto}\n"
 
         if self.fitness is None:
-            fitnes_txt = "sin evaluar"
+            fitness_txt = "sin evaluar"
         else:
-            fitnes_txt = round(self.fitness, 3)
+            fitness_txt = round(self.fitness, 3)
 
         return f"""
         PRODUCCION-----------
@@ -278,12 +278,39 @@ class Genoma:
         bahias:      {texto_bahias_rest}
         FITNESS--------------
 
-        {fitnes_txt}
+        {fitness_txt}
         ---------------------
         """
 
 class Poblacion:
-    pass
+    
+    def __init__(self, tamaño_poblacion):
+        self.genomas = []
+        self.generacion = 0 
+        self.mejor_genoma = None
+        self.tamaño_poblacion = tamaño_poblacion
+
+    @classmethod
+    def generar_poblacion(cls, tamaño):
+        pass
+
+    def seleccionar_mejor(self):
+        for genoma in self.genomas:
+            mejor_genoma_actual = self.genomas=[0]
+            if genoma.fitness < mejor_genoma_actual.fitness:
+                mejor_genoma_actual = genoma
+        
+
+
+
+
+
+
+
+
+
+
+
 
 
 #verificacion
