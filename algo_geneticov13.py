@@ -207,7 +207,7 @@ class Genoma:
     
         self.calcular_anchos_altos(bahias_prod, bahias_rest)
         self.calcular_centroides(bahias_prod, bahias_rest)
-
+        
         mhc = self.calcular_costo()
         self.fitness = self.calcular_penalizacion(mhc)
     
