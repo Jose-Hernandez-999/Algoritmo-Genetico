@@ -293,12 +293,12 @@ class Poblacion:
 
     @classmethod
     def generar_poblacion(cls, tamaño):
-        for _ in range(tamaño):
+        poblacion = cls(tamaño)
+        for _ in range(poblacion.tamaño_poblacion):
             genoma = Genoma.generar_genoma()
-            genoma.genomas.append(genoma)
-
-
-
+            poblacion.genomas.append(genoma)
+        return poblacion
+        
 
     def seleccionar_mejor(self):
         for genoma in self.genomas:
