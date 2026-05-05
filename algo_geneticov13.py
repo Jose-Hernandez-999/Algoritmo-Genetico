@@ -296,7 +296,7 @@ class Poblacion:
 
     def seleccionar_mejor(self):
         for genoma in self.genomas:
-            mejor_genoma_actual = self.genomas=[0]
+            mejor_genoma_actual = self.genomas[0]
             if genoma.fitness < mejor_genoma_actual.fitness:
                 mejor_genoma_actual = genoma
         
