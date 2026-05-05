@@ -293,19 +293,46 @@ class Poblacion:
 
     @classmethod
     def generar_poblacion(cls, tamaño):
+        #crea un objto Poblacion el cual es una lista de objetos Genoma y las guarda en el atributo genomas
+        # la cantidad de genomas depende de cls.tamaño
         poblacion = cls(tamaño)
         for _ in range(poblacion.tamaño_poblacion):
             genoma = Genoma.generar_genoma()
+            genoma.calcular_fitness()
             poblacion.genomas.append(genoma)
+
+        #for loop que itera sobre el fitness de los genomas de la poblacion y devuelve el que tenga el mejor fitness
+        # empiieza iterando sobre el primer genoma de la pobalcion  
+        mejor_genoma = poblacion.genomas[0]
+        for genoma in poblacion.genomas:
+            if genoma.fitness < mejor_genoma.fitness:
+                mejor_genoma = genoma
+
+        #se asigna el atributo de la clase .mejor_genoma con el genoma que tenga el mejor fitness el cual devuelve el for loop anterior
+        #se asigna el atributo .mejor_generacion con la generacion del genoma que tenga el mejor fitness
+        poblacion.mejor_genoma = mejor_genoma
+        poblacion.mejor_generacion = poblacion.generacion
+
         return poblacion
         
-
-    def seleccionar_mejor(self):
-        for genoma in self.genomas:
-            mejor_genoma_actual = self.genomas=[0]
-            if genoma.fitness < mejor_genoma_actual.fitness:
-                mejor_genoma_actual = genoma
+    def seleccion(self, k=3):
+        #iteramos sobre el largo de la poblacion elegiendo genomas aleatorias en grupos de 3 en 3
+        #creamos una lista de los genomas seleccionados al azar con random.sample
+        padres = []
+        for _ in range(self.tamaño_poblacion):
+            candidatos = random.sample(self.genomas, k)
+            #hacemos una comparacion de fitness de los genomas y agregamos a padres solo los mejores
+            ganador = candidatos[0]
+            for candidato in candidatos:
+                if candidato.fitness < ganador.fitness:
+                    ganador = candidato
+                    padres.append(ganador)
+            return padres
         
+    def cruce(self):
+            
+        for genoma in padres:
+            return None
 
 
 
@@ -313,10 +340,8 @@ class Poblacion:
 
 
 
-
-
-
-
+    def ciclo_generacional(self, max_generaciones):
+        pass
 
 
 #verificacion
