@@ -326,8 +326,8 @@ class Poblacion:
             for candidato in candidatos:
                 if candidato.fitness < ganador.fitness:
                     ganador = candidato
-                    padres.append(ganador)
-            return padres
+            padres.append(ganador)
+        return padres
         
     def cruce(self):
             
