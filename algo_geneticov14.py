@@ -443,15 +443,17 @@ class Poblacion:
                 else:
                     genoma.quiebres_restaurante[pos_restaurante] = 0
 
-    def ciclo_generacional(self, max_generaciones):
-        
-        
-        
-        
-        
-        
-        pass
+    def reemplazo(self, hijos):
 
+        todos = self.genomas + hijos
+        todos.sort(key = lambda genoma: genoma.fitness)
+        self.genomas = todos[:self.tamaño_poblacion]
+
+    def actualizar(self):
+        return None
+ 
+    def ciclo_generacional(self, max_generaciones):
+        return None
 
 #verificacion
 #individuo = Genoma.generar_genoma()
