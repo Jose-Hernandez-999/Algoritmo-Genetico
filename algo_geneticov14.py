@@ -329,22 +329,133 @@ class Poblacion:
             padres.append(ganador)
         return padres
         
-    def cruce(self):
+    def cruce(self, padre1, padre2):
+        #los parametros padre1 y padre2 son genomas/ objetos de la clase poblacion -> poblacion.genoma[0] o pobalcion.genoma[1] 
+        #la funcion devuelve : hijo = poblacion.cruce(padre1, padre2)
+
+        #PRODUCCION
+        #se crean los indices de corte con random para el vector de produccion
+        indices_prod = [random.randint(0,5) for i in range(2)]
+        corte1_prod = min(indices_prod) 
+        corte2_prod = max(indices_prod)
+        
+        segmento_produccion = padre1.deptos_produccion[corte1_prod:corte2_prod]
+        codigos_segmento_produccion = [d.codigo for d in segmento_produccion]
+
+        restantes_produccion = []
+        for i in range(len(padre1.deptos_produccion)):
+            indice_circular_produccion = (corte2_prod + i) % len(padre1.deptos_produccion)
+            depto_prod = padre2.deptos_produccion[indice_circular_produccion]
+            if depto_prod.codigo not in codigos_segmento_produccion:
+                restantes_produccion.append(depto_prod)
+
+        hijo_deptos_prod = [None] * len(padre1.deptos_produccion)
+        hijo_deptos_prod[corte1_prod:corte2_prod] = segmento_produccion
+
+        j = 0
+        for i in range(len(padre1.deptos_produccion)):
+            if hijo_deptos_prod[i] is None:
+                hijo_deptos_prod[i] = restantes_produccion[j]
+                j += 1
+        
+        hijo_deptos_prod = [copy.deepcopy(d) for d in hijo_deptos_prod]
+
+        punto_prod = random.randint(0,len(self.quiebres_produccion))
+        hijo_quiebres_prod = padre1.quiebres_produccion[:punto_prod] + padre2.quiebres_produccion[punto_prod:]        
+        
+
+        #RESTAURANTE----------------------------------------------------------------------------------
+        #se crean los indices de los puntos de corte con random y vector de permutacion de restaurantes
+        indices_rest = [random.randint(0,4) for i in range(2)]
+        corte1_rest = min(indices_rest)
+        corte2_rest = max(indices_rest)
+        
+        
+        segmento_restaurante = padre1.deptos_restaurante[corte1_rest:corte2_rest]
+        codigos_segmento_restaurante = [d.codigo for d in segmento_restaurante]
+
+        restantes_restaurante = []
+        for i in range(len(padre1.deptos_restaurante)):
+            indice_circular_restaurante = (corte2_rest + i) % len(padre1.deptos_restaurante)
+            depto_restaurante = padre2.deptos_restaurante[indice_circular_restaurante]
+            if depto_restaurante.codigo not in codigos_segmento_restaurante:
+                restantes_restaurante.append(depto_restaurante)
+
+        hijo_deptos_rest = [None] * len(padre1.deptos_restaurante)
+        hijo_deptos_rest[corte1_rest:corte2_rest] = segmento_restaurante
+
+        k = 0
+        for i in range(len(padre1.deptos_restaurante)):
+            if hijo_deptos_rest[i] is None:
+                hijo_deptos_rest[i] = restantes_restaurante[k]
+                k += 1
+        
+        hijo_deptos_rest = [copy.deepcopy(d) for d in hijo_deptos_rest]
+
+        punto_rest = random.randint(0,len(self.quiebres_restaurante))
+        hijo_quiebres_rest = padre1.quiebres_restaurante[:punto_rest] + padre2.quiebres_restaurante[punto_rest:]
+
+        return Genoma(
+            hijo_deptos_prod,
+            hijo_quiebres_prod,
+            hijo_deptos_rest,
+            hijo_quiebres_rest
+        )
+
+        def mutacion(self, genoma, probabilidad_mutacion = 0.2):
+            #hacer swap de codigos en posicion random para vector permutacion de produccion 
+            #flip de elementos en vector de quiebres para produccion
+
+            aleatorio_swap_prod = random.random()
+            aleatorio_flip_prod = random.random()
+            aleatorio_swap_rest = random.random()
+            aleatorio_flip_prod = random.random()
+
+            #PRODUCCION
+            #swap
+            if aleatorio_swap_prod < probabilidad_mutacion:
+                pos_i_produccion = random.randint(0, len(self.deptos_produccion)-1)
+                pos_j_produccion = random.randint(0, len(self.deptos_produccion)-1)
+                genoma.deptos_produccion[pos_i_produccion], genoma.deptos_produccion[pos_j_produccion] = \
+                genoma.deptos_produccion[pos_j_produccion], genoma.deptos_produccion[pos_i_produccion]
             
-        for genoma in padres:
-            return None
+            #flip
+            if aleatorio_flip_prod < probabilidad_mutacion:
+                pos_produccion = random.randint(0, len(quiebres_produccion)-1)
+                if genoma.quiebres_produccion[pos_produccion] == 0:
+                    genoma.quiebres_produccion[pos_produccion] = 1
+                else:
+                    genoma.quiebres_produccion[pos_produccion] = 0
 
+            #RESTAURANTE
+            #swap
+            if aleatorio_swap_rest < probabilidad_mutacion:
+                pos_i_restaurante = random.randint(0, len(self.deptos_restaurante)-1)
+                pos_j_restaurante = random.randint(0, len(self.deptos_restaurante)-1)
+                genoma.deptos_restaurante[pos_i_restaurante], genoma.deptos_restaurante[pos_j_restaurante] = \
+                genoma.deptos_restaurante[pos_j_restaurante], genoma.deptos_restaurante[pos_i_restaurante] 
 
-
-
-
-
+            #flip            
+            if aleatorio_flip_rest < probabilidad_mutacion:
+                pos_restaurante = random.randint(0, len(genoma.quiebres_restaurante)-1)
+                if genoma.quiebres_restaurante[pos_restaurante] == 0:
+                    genoma.quiebres_restaurante[pos_restaurante] = 1
+                else:
+                    genoma.quiebres_restaurante[pos_restaurante] = 0
 
     def ciclo_generacional(self, max_generaciones):
+        
+        
+        
+        
+        
+        
         pass
 
 
 #verificacion
-individuo = Genoma.generar_genoma()
-individuo.calcular_fitness()
-print(individuo)
+#individuo = Genoma.generar_genoma()
+#individuo.calcular_fitness()
+#print(individuo)
+
+print(random.random())
