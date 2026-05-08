@@ -459,5 +459,3 @@ class Poblacion:
 #individuo = Genoma.generar_genoma()
 #individuo.calcular_fitness()
 #print(individuo)
-
-print(random.random())
