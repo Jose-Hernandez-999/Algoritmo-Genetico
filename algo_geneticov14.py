@@ -360,7 +360,7 @@ class Poblacion:
         
         hijo_deptos_prod = [copy.deepcopy(d) for d in hijo_deptos_prod]
 
-        punto_prod = random.randint(0,len(self.quiebres_produccion))
+        punto_prod = random.randint(0,len(padre1.quiebres_produccion))
         hijo_quiebres_prod = padre1.quiebres_produccion[:punto_prod] + padre2.quiebres_produccion[punto_prod:]        
         
 
@@ -392,7 +392,7 @@ class Poblacion:
         
         hijo_deptos_rest = [copy.deepcopy(d) for d in hijo_deptos_rest]
 
-        punto_rest = random.randint(0,len(self.quiebres_restaurante))
+        punto_rest = random.randint(0,len(padre1.quiebres_restaurante))
         hijo_quiebres_rest = padre1.quiebres_restaurante[:punto_rest] + padre2.quiebres_restaurante[punto_rest:]
 
         return Genoma(
@@ -402,46 +402,45 @@ class Poblacion:
             hijo_quiebres_rest
         )
 
-        def mutacion(self, genoma, probabilidad_mutacion = 0.2):
-            #hacer swap de codigos en posicion random para vector permutacion de produccion 
-            #flip de elementos en vector de quiebres para produccion
+    def mutacion(self, genoma, probabilidad_mutacion = 0.2):
+        #hacer swap de codigos en posicion random para vector permutacion de produccion 
+        #flip de elementos en vector de quiebres para produccion
+        aleatorio_swap_prod = random.random()
+        aleatorio_flip_prod = random.random()
+        aleatorio_swap_rest = random.random()
+        aleatorio_flip_rest = random.random()
 
-            aleatorio_swap_prod = random.random()
-            aleatorio_flip_prod = random.random()
-            aleatorio_swap_rest = random.random()
-            aleatorio_flip_prod = random.random()
-
-            #PRODUCCION
-            #swap
-            if aleatorio_swap_prod < probabilidad_mutacion:
-                pos_i_produccion = random.randint(0, len(self.deptos_produccion)-1)
-                pos_j_produccion = random.randint(0, len(self.deptos_produccion)-1)
-                genoma.deptos_produccion[pos_i_produccion], genoma.deptos_produccion[pos_j_produccion] = \
-                genoma.deptos_produccion[pos_j_produccion], genoma.deptos_produccion[pos_i_produccion]
+        #PRODUCCION
+        #swap
+        if aleatorio_swap_prod < probabilidad_mutacion:
+            pos_i_produccion = random.randint(0, len(genoma.deptos_produccion)-1)
+            pos_j_produccion = random.randint(0, len(genoma.deptos_produccion)-1)
+            genoma.deptos_produccion[pos_i_produccion], genoma.deptos_produccion[pos_j_produccion] = \
+            genoma.deptos_produccion[pos_j_produccion], genoma.deptos_produccion[pos_i_produccion]
             
-            #flip
-            if aleatorio_flip_prod < probabilidad_mutacion:
-                pos_produccion = random.randint(0, len(quiebres_produccion)-1)
-                if genoma.quiebres_produccion[pos_produccion] == 0:
-                    genoma.quiebres_produccion[pos_produccion] = 1
-                else:
-                    genoma.quiebres_produccion[pos_produccion] = 0
+        #flip
+        if aleatorio_flip_prod < probabilidad_mutacion:
+            pos_produccion = random.randint(0, len(genoma.quiebres_produccion)-1)
+            if genoma.quiebres_produccion[pos_produccion] == 0:
+                genoma.quiebres_produccion[pos_produccion] = 1
+            else:
+                genoma.quiebres_produccion[pos_produccion] = 0
 
-            #RESTAURANTE
-            #swap
-            if aleatorio_swap_rest < probabilidad_mutacion:
-                pos_i_restaurante = random.randint(0, len(self.deptos_restaurante)-1)
-                pos_j_restaurante = random.randint(0, len(self.deptos_restaurante)-1)
-                genoma.deptos_restaurante[pos_i_restaurante], genoma.deptos_restaurante[pos_j_restaurante] = \
-                genoma.deptos_restaurante[pos_j_restaurante], genoma.deptos_restaurante[pos_i_restaurante] 
+        #RESTAURANTE
+        #swap
+        if aleatorio_swap_rest < probabilidad_mutacion:
+            pos_i_restaurante = random.randint(0, len(genoma.deptos_restaurante)-1)
+            pos_j_restaurante = random.randint(0, len(genoma.deptos_restaurante)-1)
+            genoma.deptos_restaurante[pos_i_restaurante], genoma.deptos_restaurante[pos_j_restaurante] = \
+            genoma.deptos_restaurante[pos_j_restaurante], genoma.deptos_restaurante[pos_i_restaurante] 
 
-            #flip            
-            if aleatorio_flip_rest < probabilidad_mutacion:
-                pos_restaurante = random.randint(0, len(genoma.quiebres_restaurante)-1)
-                if genoma.quiebres_restaurante[pos_restaurante] == 0:
-                    genoma.quiebres_restaurante[pos_restaurante] = 1
-                else:
-                    genoma.quiebres_restaurante[pos_restaurante] = 0
+        #flip            
+        if aleatorio_flip_rest < probabilidad_mutacion:
+            pos_restaurante = random.randint(0, len(genoma.quiebres_restaurante)-1)
+            if genoma.quiebres_restaurante[pos_restaurante] == 0:
+                genoma.quiebres_restaurante[pos_restaurante] = 1
+            else:
+                genoma.quiebres_restaurante[pos_restaurante] = 0
 
     def reemplazo(self, hijos):
 
@@ -449,13 +448,65 @@ class Poblacion:
         todos.sort(key = lambda genoma: genoma.fitness)
         self.genomas = todos[:self.tamaño_poblacion]
 
-    def actualizar(self):
-        return None
- 
-    def ciclo_generacional(self, max_generaciones):
-        return None
+    def actualizar_mejor(self):
+        
+        mejor_generacion_actual = self.genomas[0]
+        if mejor_generacion_actual.fitness < self.mejor_genoma.fitness:
+            self.mejor_genoma = mejor_generacion_actual
+            self.mejor_generacion = self.generacion
+         
+    def ciclo_generacional(self, max_generaciones, probabilidad_mutacion = 0.2):
+
+        while self.generacion < max_generaciones:
+            padres = self.seleccion()
+
+            hijos = []
+            for i in range(0, len(padres)-1, 2):
+                hijo = self.cruce(padres[i], padres[i+1])
+                self.mutacion(hijo, probabilidad_mutacion)
+                hijo.calcular_fitness()
+                hijos.append(hijo)
+            
+            self.reemplazo(hijos)
+            self.actualizar_mejor()
+        
+            self.generacion += 1
+
+            if self.generacion % 10 == 0:
+                print(self.generacion)
+                print(self.mejor_genoma)
+
+        return self.mejor_genoma
+
+
+    def __repr__(self):
+
+        mejor_fitness_txt = round(self.mejor_genoma.fitness, 3)
+        mejor_generacion_txt = self.mejor_generacion
+        mejor_genoma_txt = str(self.mejor_genoma)
+    
+        return f"""
+        ===================
+        POBLACION:
+        ===================
+        Generacion Actual: {self.generacion}
+        Tamaño Poblacion : {self.tamaño_poblacion}
+        -------------------
+        Mejor_fitness : {mejor_fitness_txt}
+        Encontrado en iteracion/generacion: {mejor_generacion_txt}
+        -------------------
+        MEJOR GENOMA:
+        {mejor_genoma_txt}
+        -------------------
+        """ 
 
 #verificacion
 #individuo = Genoma.generar_genoma()
 #individuo.calcular_fitness()
 #print(individuo)
+poblacion = Poblacion.generar_poblacion(50)
+poblacion.ciclo_generacional(100)
+#print(f"Mejor Fitness:    {poblacion.mejor_genoma.fitness}")
+#print(f"Mejor Generacion: {poblacion.mejor_generacion}")
+#print(poblacion.mejor_genoma)
+print(repr(poblacion))
