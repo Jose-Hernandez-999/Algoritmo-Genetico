@@ -459,16 +459,16 @@ class Poblacion:
             tamaño_movimientos_rest = max(1, int(len(lider.deptos_produccion) * theta))
 
             vecino = copy.deepcopy(lider)
-            pos = randint(0, len(vecino.quiebres_produccion)-1)
+            pos = random.randint(0, len(vecino.quiebres_produccion)-1)
 
             for _ in range(n_iteraciones):
                 if random.random() < 0.5:
-                    i = randint(0, len(vecino.deptos_produccion)-1)
-                    j = randint(0, len(vecino.deptos_produccion)-1)
+                    i = random.randint(0, len(vecino.deptos_produccion)-1)
+                    j = random.randint(0, len(vecino.deptos_produccion)-1)
                     vecino.deptos_produccion[i], vecino.deptos_produccion[j] = \
-                    vecino.deptos_produccion[j], vecino_deptos_produccion[i]
+                    vecino.deptos_produccion[j], vecino.deptos_produccion[i]
 
-                if vecino.quiebres_produccion[pos] == 0:
+                elif vecino.quiebres_produccion[pos] == 0:
                     vecino.quiebres_produccion[pos] = 1
                 else:
                     vecino.quiebres_produccion[pos] = 0
