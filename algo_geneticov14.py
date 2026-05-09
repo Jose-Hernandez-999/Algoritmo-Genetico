@@ -448,6 +448,42 @@ class Poblacion:
         todos.sort(key = lambda genoma: genoma.fitness)
         self.genomas = todos[:self.tamaño_poblacion]
 
+    def busqueda_local_gwo(self, n_iteraciones = 10, theta = 0.4):
+        #busqueda de nuevas soluciones 
+        alfa = self.genomas[0] 
+        beta = self.genomas[1]
+        delta = self.genomas[2]
+
+        for lider in [alfa, beta, delta]:
+            tamaño_movimientos_prod = max(1, int(len(lider.deptos_produccion) * theta))
+            tamaño_movimientos_rest = max(1, int(len(lider.deptos_produccion) * theta))
+
+            vecino = copy.deepcopy(lider)
+            pos = randint(0, len(vecino.quiebres_produccion)-1)
+
+            for _ in range(n_iteraciones):
+                if random.random() < 0.5:
+                    i = randint(0, len(vecino.deptos_produccion)-1)
+                    j = randint(0, len(vecino.deptos_produccion)-1)
+                    vecino.deptos_produccion[i], vecino.deptos_produccion[j] = \
+                    vecino.deptos_produccion[j], vecino_deptos_produccion[i]
+
+                if vecino.quiebres_produccion[pos] == 0:
+                    vecino.quiebres_produccion[pos] = 1
+                else:
+                    vecino.quiebres_produccion[pos] = 0
+
+
+
+
+
+        return None
+
+
+
+
+
+        
     def actualizar_mejor(self):
         
         mejor_generacion_actual = self.genomas[0]
