@@ -478,6 +478,8 @@ class Poblacion:
 
         return self.mejor_genoma
 
+    def busqueda_local_gwo(self):
+        return None
 
     def __repr__(self):
 
