@@ -68,16 +68,16 @@ class Genoma:
     distancia_instalaciones = 43
     relacion_aspecto_maxima = 4
     matriz_flujos = [
-        [ 0, 175, 0, 0, 0, 0, 0, 0, 0 ],
-        [ 0, 0, 0, 0, 0, 175, 0, 0, 0 ],
-        [ 0, 0, 0, 0, 0, 0, 105, 70, 0 ],
-        [ 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-        [ 0, 0, 0, 0, 0, 0, 60, 0, 0 ],
-        [ 0, 0, 175, 0, 0, 0, 0, 0, 0 ],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
-    ] 
+    [ 0, 45, 45, 0, 0, 135, 0, 0, 0 ],
+    [ 90, 0, 0, 0, 0, 0, 0, 0, 0 ],
+    [ 135, 80, 0, 0, 0, 10, 0, 0, 0 ],
+    [ 1, 1, 1, 0, 1, 1, 1, 1, 1 ],
+    [ 0, 0, 0, 0, 0, 40, 0, 0, 0 ],
+    [ 0, 0, 15, 0, 0, 0, 90, 75, 45 ],
+    [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+    [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+    [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+    ]
 
     def __init__(self, deptos_produccion, quiebres_produccion, 
                        deptos_restaurante, quiebres_restaurante, fitness = None):
@@ -476,7 +476,6 @@ class Poblacion:
 
 
 
-
         return None
 
 
@@ -514,9 +513,7 @@ class Poblacion:
 
         return self.mejor_genoma
 
-    def busqueda_local_gwo(self):
-        return None
-
+    
     def __repr__(self):
 
         mejor_fitness_txt = round(self.mejor_genoma.fitness, 3)
