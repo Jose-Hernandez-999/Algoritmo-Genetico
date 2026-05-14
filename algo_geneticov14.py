@@ -448,6 +448,7 @@ class Poblacion:
         todos.sort(key = lambda genoma: genoma.fitness)
         self.genomas = todos[:self.tamaño_poblacion]
 
+
     def busqueda_local_gwo(self, n_iteraciones = 10, theta = 0.4):
         #busqueda de nuevas soluciones 
         alfa = self.genomas[0] 
@@ -458,20 +459,46 @@ class Poblacion:
             tamaño_movimientos_prod = max(1, int(len(lider.deptos_produccion) * theta))
             tamaño_movimientos_rest = max(1, int(len(lider.deptos_produccion) * theta))
 
-            vecino = copy.deepcopy(lider)
-            pos = random.randint(0, len(vecino.quiebres_produccion)-1)
-
             for _ in range(n_iteraciones):
-                if random.random() < 0.5:
-                    i = random.randint(0, len(vecino.deptos_produccion)-1)
-                    j = random.randint(0, len(vecino.deptos_produccion)-1)
-                    vecino.deptos_produccion[i], vecino.deptos_produccion[j] = \
-                    vecino.deptos_produccion[j], vecino.deptos_produccion[i]
+                vecino = copy.deepcopy(lider)
+                pos_prod = random.randint(0,len(vecino.deptos_produccion))
+                pos_rest = random.randint(0,len(vecino.deptos_restaurante))
 
-                elif vecino.quiebres_produccion[pos] == 0:
-                    vecino.quiebres_produccion[pos] = 1
-                else:
-                    vecino.quiebres_produccion[pos] = 0
+                #para produccion
+                for _ in range(tamaño_movimientos_prod):
+                    if random.random() < 0.5:   
+                        i = random.randint(0, len(vecino.deptos_produccion)-1)
+                        j = random.randint(0, len(vecino.deptos_produccion)-1)
+                        vecino.deptos_produccion[i], vecino.deptos_produccion[j] = \
+                        vecino.deptos_produccion[j], vecino.deptos_produccion[i]
+
+                    if vecino.quiebres_produccion[pos_prod] == 0:
+                        vecino.quiebres_produccion[pos_prod] = 1
+                    else:
+                        vecino.quiebres_produccion[pos_prod] = 0
+
+                #para restaurante
+                for _ in range(tamaño_movimientos_rest):
+                    if random.random() < 0.5:
+                        k = random.randint(0, len(vecino.deptos_restaurante)-1)
+                        l = random.randint(0, len(vecino.deptos_restaurante)-1)
+                        vecino.deptos_restaurante[k], vecino.deptos_restaurante[l] = \
+                        vecino.deptos_restaurante[l], vecino.deptos_restaurante[k]
+
+                    if vecino.deptos_restaurante[pos_rest] == 0:
+                        vecino.deptos_restaurante[pos_rest] = 1
+                    else:
+                        vecino.deptos_restaurante[pos_rest] = 0
+
+                
+                vecino.calcular_fitness()
+                
+
+                
+
+
+
+
 
 
 
