@@ -502,39 +502,50 @@ class Poblacion:
             
         #---------------------------------------------
         #COMPORTAMIENTO DE ATAQUE
-            
         for lider in [beta, delta]:
             #COMPORTAMIENTO PARA PRODUCCION
             for i in range(len(lider.deptos_produccion)):
-                if lider.deptos_prod[i].codigo != alfa.deptos_prod[i].codigo:
+                if lider.deptos_produccion[i].codigo != alfa.deptos_produccion[i].codigo:
                     vecino = copy.deepcopy(lider)
 
-#ESTO SE BEBE BORRAR, ES SOLO PARA QUE ME DEJE HACER PUSH
-for lider in [beta, delta]:
-            #COMPORTAMIENTO PARA PRODUCCION
-            for i in range(len(lider.deptos_produccion)):
-                if lider.deptos_prod[i].codigo != alfa.deptos_prod[i].codigo:
+                    codigo_buscado_produccion = alfa.deptos_produccion[i].codigo
+                    for j in range(len(vecino.deptos_produccion)):
+                        if vecino.deptos_produccion[j].codigo == codigo_buscado_produccion:
+                            posicion_j = j
+                            break
+                    vecino.deptos_produccion[i], vecino.deptos_produccion[posicion_j] = \
+                    vecino.deptos_produccion[posicion_j], vecino.deptos_produccion[i]
+
+                    vecino.calcular_fitness()
+                    if vecino.fitness < lider.fitness:
+                        for k in range(len(self.genomas)):
+                            if self.genomas[k] is lider:
+                                self.genomas[k] = vecino
+                                break
+                        lider = vecino
+
+            #COMPORTAMIENTO PARA RESTAURANTE
+            for i in range(len(lider.deptos_restaurante)):
+                if lider.deptos_restaurante[i].codigo != alfa.deptos_restaurante[i].codigo:
                     vecino = copy.deepcopy(lider)
-                
 
+                    codigo_buscado_restaurante = alfa.deptos_restaurante[i].codigo
+                    for j in range(len(vecino.deptos_restaurante)):
+                        if vecino.deptos_restaurante[j].codigo == codigo_buscado_restaurante:
+                            posicion_j = j
+                            break
+                    vecino.deptos_restaurante[i], vecino.deptos_restaurante[posicion_j] = \
+                    vecino.deptos_restaurante[posicion_j], vecino.deptos_restaurante[i]
 
-
-                
-
-
-
-
-
-
-
-
-        return None
-
-
-
-
-
-        
+                    vecino.calcular_fitness()
+                    if vecino.fitness < lider.fitness:
+                        for k in range(len(self.genomas)):
+                            if self.genomas[k] is lider:
+                                self.genomas[k] = vecino
+                                break
+                        lider = vecino
+                        
+                             
     def actualizar_mejor(self):
         
         mejor_generacion_actual = self.genomas[0]
