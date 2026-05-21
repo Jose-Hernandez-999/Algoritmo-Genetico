@@ -93,13 +93,14 @@ class Genoma:
 
         permutacion_produccion = random.sample(cls.produccion, len(cls.produccion))
         permutacion_produccion = [copy.deepcopy(d) for d in permutacion_produccion]
-        quiebres_produccion = [random.randint(0,1) for _ in range(len(cls.produccion)-1)]    
-
+        quiebres_produccion = [random.randint(0,1) for _ in range(len(cls.produccion)-1)]
+        
         permutacion_restaurante =  random.sample(cls.restaurante, len(cls.restaurante))
         permutacion_restaurante = [copy.deepcopy(d) for d in permutacion_restaurante]
         quiebres_restaurante = [random.randint(0,1) for _ in range(len(cls.restaurante)-1)]
-
+            
         return  cls(permutacion_produccion, quiebres_produccion, permutacion_restaurante, quiebres_restaurante)
+
 
     def generar_bahias(self, departamentos, quiebres):
         
@@ -402,7 +403,7 @@ class Poblacion:
             hijo_quiebres_rest
         )
 
-    def mutacion(self, genoma, probabilidad_mutacion = 0.2):
+    def mutacion(self, genoma):
         #hacer swap de codigos en posicion random para vector permutacion de produccion 
         #flip de elementos en vector de quiebres para produccion
         aleatorio_swap_prod = random.random()
@@ -410,16 +411,21 @@ class Poblacion:
         aleatorio_swap_rest = random.random()
         aleatorio_flip_rest = random.random()
 
+        probabilidad_swap_produccion = 0.2
+        probabilidad_flip_produccion = 0.5
+        probabilidad_swap_restaurante = 0.2
+        probabilidad_flip_restaurante = 0.3
+
         #PRODUCCION
         #swap
-        if aleatorio_swap_prod < probabilidad_mutacion:
+        if aleatorio_swap_prod < probabilidad_swap_produccion:
             pos_i_produccion = random.randint(0, len(genoma.deptos_produccion)-1)
             pos_j_produccion = random.randint(0, len(genoma.deptos_produccion)-1)
             genoma.deptos_produccion[pos_i_produccion], genoma.deptos_produccion[pos_j_produccion] = \
             genoma.deptos_produccion[pos_j_produccion], genoma.deptos_produccion[pos_i_produccion]
             
         #flip
-        if aleatorio_flip_prod < probabilidad_mutacion:
+        if aleatorio_flip_prod < probabilidad_flip_produccion:
             pos_produccion = random.randint(0, len(genoma.quiebres_produccion)-1)
             if genoma.quiebres_produccion[pos_produccion] == 0:
                 genoma.quiebres_produccion[pos_produccion] = 1
@@ -428,14 +434,14 @@ class Poblacion:
 
         #RESTAURANTE
         #swap
-        if aleatorio_swap_rest < probabilidad_mutacion:
+        if aleatorio_swap_rest < probabilidad_swap_restaurante:
             pos_i_restaurante = random.randint(0, len(genoma.deptos_restaurante)-1)
             pos_j_restaurante = random.randint(0, len(genoma.deptos_restaurante)-1)
             genoma.deptos_restaurante[pos_i_restaurante], genoma.deptos_restaurante[pos_j_restaurante] = \
             genoma.deptos_restaurante[pos_j_restaurante], genoma.deptos_restaurante[pos_i_restaurante] 
 
         #flip            
-        if aleatorio_flip_rest < probabilidad_mutacion:
+        if aleatorio_flip_rest < probabilidad_flip_restaurante:
             pos_restaurante = random.randint(0, len(genoma.quiebres_restaurante)-1)
             if genoma.quiebres_restaurante[pos_restaurante] == 0:
                 genoma.quiebres_restaurante[pos_restaurante] = 1
@@ -457,12 +463,12 @@ class Poblacion:
 
         for lider in [alfa, beta, delta]:
             tamaño_movimientos_prod = max(1, int(len(lider.deptos_produccion) * theta))
-            tamaño_movimientos_rest = max(1, int(len(lider.deptos_produccion) * theta))
+            tamaño_movimientos_rest = max(1, int(len(lider.deptos_restaurante) * theta))
 
             for _ in range(n_iteraciones):
                 vecino = copy.deepcopy(lider)
-                pos_prod = random.randint(0,len(vecino.deptos_produccion))
-                pos_rest = random.randint(0,len(vecino.deptos_restaurante))
+                pos_prod = random.randint(0,len(vecino.quiebres_produccion)-1)
+                pos_rest = random.randint(0,len(vecino.quiebres_restaurante)-1)
 
                 #para produccion
                 for _ in range(tamaño_movimientos_prod):
@@ -472,7 +478,7 @@ class Poblacion:
                         vecino.deptos_produccion[i], vecino.deptos_produccion[j] = \
                         vecino.deptos_produccion[j], vecino.deptos_produccion[i]
 
-                    if vecino.quiebres_produccion[pos_prod] == 0:
+                    elif vecino.quiebres_produccion[pos_prod] == 0:
                         vecino.quiebres_produccion[pos_prod] = 1
                     else:
                         vecino.quiebres_produccion[pos_prod] = 0
@@ -485,18 +491,18 @@ class Poblacion:
                         vecino.deptos_restaurante[k], vecino.deptos_restaurante[l] = \
                         vecino.deptos_restaurante[l], vecino.deptos_restaurante[k]
 
-                    if vecino.deptos_restaurante[pos_rest] == 0:
-                        vecino.deptos_restaurante[pos_rest] = 1
+                    elif vecino.quiebres_restaurante[pos_rest] == 0:
+                        vecino.quiebres_restaurante[pos_rest] = 1
                     else:
-                        vecino.deptos_restaurante[pos_rest] = 0
+                        vecino.quiebres_restaurante[pos_rest] = 0
 
                 
                 vecino.calcular_fitness()
 
-                if vecino.fitness < lider.fitness():
+                if vecino.fitness < lider.fitness:
                     for i in range(len(self.genomas)):
                         if self.genomas[i] is lider:
-                            self.genomas[i] = lider
+                            self.genomas[i] = vecino
                             break
                     lider = vecino
             
@@ -553,7 +559,7 @@ class Poblacion:
             self.mejor_genoma = mejor_generacion_actual
             self.mejor_generacion = self.generacion
          
-    def ciclo_generacional(self, max_generaciones, probabilidad_mutacion = 0.2):
+    def ciclo_generacional(self, max_generaciones):
 
         while self.generacion < max_generaciones:
             padres = self.seleccion()
@@ -561,11 +567,12 @@ class Poblacion:
             hijos = []
             for i in range(0, len(padres)-1, 2):
                 hijo = self.cruce(padres[i], padres[i+1])
-                self.mutacion(hijo, probabilidad_mutacion)
+                self.mutacion(hijo)
                 hijo.calcular_fitness()
                 hijos.append(hijo)
             
             self.reemplazo(hijos)
+            self.busqueda_local_gwo()
             self.actualizar_mejor()
         
             self.generacion += 1
@@ -597,14 +604,31 @@ class Poblacion:
         {mejor_genoma_txt}
         -------------------
         """ 
+#-----------------------------------------------------------------------------------------
+#VERIFICACIONES
 
-#verificacion
-#individuo = Genoma.generar_genoma()
-#individuo.calcular_fitness()
-#print(individuo)
-poblacion = Poblacion.generar_poblacion(50)
-poblacion.ciclo_generacional(100)
+#verificacion de que cada genoma (posible layout) se genera y tiene fitness (costo mhc)
+#genoma = Genoma.generar_genoma()
+#genoma.calcular_fitness()
+#print(genoma)
+
+#verificacion de la funcion que inicializa la poblacion
+# devuelve automaticamente el mejor genoma de la poblacion gracias al repr method
+#poblacion = Poblacion.generar_poblacion(10)
+#print(poblacion)
+
+#EJECUCION DEL ALGORITMO COMPLETO:
+#parametros usados:
+# tamaño de poblacion (cantidad de objetos genoma los cuales usa el algoritmo para iterar) = 30
+# generaciones (iteraciones del algoritmo) = 100
+# k (cantidad de hijos a seleccionar) = 3 
+# probabilidad de mutacion (pobabilidad de alterar los vectores del genoma)= 0.2
+# iteraciones del gw optimizer (veces que el algoritmo iterar para introducir aleatoriedad y no sobreoptimizar el algoritmo) = 10
+# theta (cantidad de moficaciones al vector departamentos en el gw optimizer) = 0,4   
+
+poblacion = Poblacion.generar_poblacion(100)
+poblacion.ciclo_generacional(max_generaciones = 10)
 print(f"Mejor Fitness:    {poblacion.mejor_genoma.fitness}")
 print(f"Mejor Generacion: {poblacion.mejor_generacion}")
 print(poblacion.mejor_genoma)
-print(repr(poblacion))
+#-----------------------------------------------------------------------------------------
